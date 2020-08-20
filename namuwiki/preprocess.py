@@ -1,8 +1,6 @@
-"""
-나무위키 데이터 확
-"""
 import ijson
 import codecs
+import re
 from soynlp.normalizer import *
 
 def load_json(filename):
@@ -36,6 +34,7 @@ def load_and_write_content(filename, filename2):
 """
 doc_num 갯수만큼 나무 위키 데이터 만들기
 제목, 내용으로 텍스트 파일 생성
+>>> make_mini_namu(namu_origin,mini_namu,is_mini=False)
 """
 def make_mini_namu(namu_origin, mini_namu, doc_num = 100, is_mini=True):
     count = 0
@@ -77,11 +76,33 @@ def change_mapping(text, mapping):
 def remove_repeat(text, num_repeats=2):
     text= repeat_normalize(text, num_repeats=num_repeats)
     return text
+
+"""
+"""
+def namu_preprocess(namu_origin, processed_file):
+    file = open(processed_file, 'w', encoding='utf-8')
+    r_f= open(namu_origin, 'r')
+
+    while True:
+        line = r_f.readline()
+        line = clean_html(line)
+        file.write(line)
+        if not line: break
+        # print(line)
+
+
+    file.close()
+
+def clean_html(raw_html):
+  cleanr = re.compile('<.*?>')
+  cleantext = re.sub(cleanr, '', raw_html)
+  return cleantext
+
 if __name__ == "__main__":
     namu_origin = '../data/docData200302.json'
-    mini_namu = 'mini_namu.txt'
+    mini_namu = './mini_namu.txt'
+    processed_file = './namu_processed.txt'
 
-    make_mini_namu(namu_origin,mini_namu,is_mini=False)
-
+    namu_preprocess(mini_namu, processed_file)
 
 
