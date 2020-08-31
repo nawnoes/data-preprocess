@@ -202,6 +202,7 @@ if __name__ == "__main__":
     mini_namu = './namuwiki.txt'
     processed_file1 = './namu_processed.txt'
     processed_file2 = './namu_processed-doc.txt'
+    data_path = "/Volumes/My Passport for Mac/00 nlp data"
     # 나무위키 데이터 json -> text
     # make_mini_namu(namu_origin,mini_namu,is_mini=False)
 
