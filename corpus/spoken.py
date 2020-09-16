@@ -29,9 +29,24 @@ for json_file_name in progress_bar1:
     docs = json_data['document']
     for doc in docs:
         metadata = doc['metadata']
-        paragraphs = doc['paragraph']
+        save_file.write(metadata['title'] + '\n')
+        try:
+            save_file.write(metadata['topic'] + '\n')
+        except Exception:
+            continue
+
+        speakers = metadata['speaker']
+        speakers_dict = {}
+        for speaker in speakers:
+            speakers_dict[speaker['id']] = speaker['occupation']
+
+        paragraphs = doc['utterance']
         for paragraph in paragraphs:
-            save_file.write(paragraph['form'] + '\n')
+            try:
+                save_file.write(f'{speakers_dict[paragraph["speaker_id"]]}: {paragraph["form"]}\n')
+            except Exception:
+                # print('save_file error: ', Exception)
+                continue
         save_file.write('\n')
 
     # save_file.write('\n')

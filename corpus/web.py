@@ -1,10 +1,11 @@
 import os
 import json
+import kss
 from tqdm import tqdm
 
 # 파일 경로
-dir_path = "/Volumes/My Passport for Mac/00_nlp/00 모두의 말뭉치/NEWS"
-save_file_name ='/Volumes/My Passport for Mac/00_nlp/00 모두의 말뭉치/NEWS.txt'
+dir_path = "/Volumes/My Passport for Mac/00_nlp/00 모두의 말뭉치/WEB"
+save_file_name ='/Volumes/My Passport for Mac/00_nlp/00 모두의 말뭉치/WEB.txt'
 
 # 파일 경로 내 목록
 dir_list = os.listdir(dir_path)
@@ -24,11 +25,18 @@ for json_file_name in progress_bar1:
         print('error: ', Exception)
         continue
     meta_info = json_data['document'][0]['metadata']
-    # paragraphs = json_data['document'][0]['paragraph']
     docs = json_data['document']
     for doc in docs:
+        metadata = doc['metadata']
+        save_file.write(metadata['title'] + '\n')
+
         paragraphs = doc['paragraph']
         for paragraph in paragraphs:
-            save_file.write(paragraph['form'] + '\n')
+            try:
+                for sent in kss.split_sentences(paragraph["form"]):
+                    save_file.write(sent.replace('\n', '') + "\n")
+            except Exception:
+                print('save_file error: ', Exception)
+                continue
         save_file.write('\n')
 save_file.close()
